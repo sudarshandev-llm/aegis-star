@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #050811;
+    background-image: 
+      radial-gradient(circle at 50% 0%, rgba(0, 243, 255, 0.08) 0%, transparent 60%),
+      radial-gradient(circle at 85% 90%, rgba(255, 42, 109, 0.05) 0%, transparent 50%),
+      linear-gradient(180deg, rgba(7, 10, 17, 0.95) 0%, rgba(4, 6, 12, 1) 100%);
+    color: #e2e8f0;
+    min-height: 100vh;
+  }
+}
+
+/* Glassmorphism Tactical Panels */
+.hud-card {
+  background: rgba(10, 16, 30, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 243, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  position: relative;
+}
+
+.hud-card::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid #00f3ff;
+  border-left: 2px solid #00f3ff;
+}
+
+.hud-card::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 8px;
+  height: 8px;
+  border-bottom: 2px solid #00f3ff;
+  border-right: 2px solid #00f3ff;
+}
+
+/* Severity Glow Effects */
+.hud-card-high {
+  border-color: rgba(255, 42, 109, 0.5) !important;
+  box-shadow: 0 0 20px rgba(255, 42, 109, 0.25), inset 0 0 15px rgba(255, 42, 109, 0.1) !important;
+}
+
+.hud-card-high::before, .hud-card-high::after {
+  border-color: #ff2a6d !important;
+}
+
+.hud-card-medium {
+  border-color: rgba(255, 183, 3, 0.4) !important;
+  box-shadow: 0 0 15px rgba(255, 183, 3, 0.15) !important;
+}
+
+.hud-card-medium::before, .hud-card-medium::after {
+  border-color: #ffb703 !important;
+}
+
+/* Scanline Effect Overlay */
+.scanlines {
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0),
+    rgba(255,255,255,0) 50%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0.3)
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(7, 10, 17, 0.8);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 243, 255, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 243, 255, 0.6);
+}
+
+/* Animated Pulse Markers */
+@keyframes radar-pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 243, 255, 0.7);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 10px rgba(0, 243, 255, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 243, 255, 0);
+  }
+}
+
+.radar-marker {
+  animation: radar-pulse 2s infinite;
+}
+
+/* Animated Vector Trajectory Lines */
+@keyframes dash-flow {
+  from {
+    stroke-dashoffset: 20;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.vector-dash-animate {
+  stroke-dasharray: 4 4;
+  animation: dash-flow 1.2s linear infinite;
+}
