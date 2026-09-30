@@ -179,12 +179,31 @@ npm run dev
 # 🚀 Frontend ready at http://localhost:5173
 ```
 
-### Production Build
+### Production Build & Deploy
 
 ```bash
-cd client
-npm run build    # Outputs optimized bundle to client/dist/
+# Build the client and prepare production assets
+npm run build
+
+# Start the full-stack server (serves both React UI and REST API)
+npm start
 ```
+
+### 🌐 Deploying to Render (Free Live URL)
+
+AEGIS is configured for zero-config 1-click deployment on **[Render](https://render.com)**:
+
+1. Create a free account at [render.com](https://render.com).
+2. Click **New +** -> **Web Service**.
+3. Connect your GitHub repository: `sudarshandev-llm/aegis-star`.
+4. Render will auto-detect settings, or enter:
+   - **Environment**: `Node`
+   - **Build Command**: `npm run build`
+   - **Start Command**: `npm start`
+   - **Instance Type**: `Free`
+5. *(Optional)* Add your free `NASA_API_KEY` under **Environment Variables**. (Defaults to `DEMO_KEY` if omitted).
+6. Click **Deploy Web Service**! Within 2–3 minutes, your live URL will be active (e.g., `https://aegis-star.onrender.com`).
+
 
 ---
 

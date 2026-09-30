@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: aegis-star
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20.18.0
+      - key: NASA_API_KEY
+        value: DEMO_KEY
+      - key: ANTHROPIC_API_KEY
+        sync: false

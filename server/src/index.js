@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 import { getLatestEvents, getLatestIssPosition, getLatestBriefing } from './db.js';
@@ -19,6 +20,12 @@ const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
+
+// Serve static frontend assets built by Vite
+const clientDistPath = path.resolve(__dirname, '../../client/dist');
+if (fs.existsSync(clientDistPath)) {
+  app.use(express.static(clientDistPath));
+}
 
 // REST Routes
 
@@ -161,11 +168,28 @@ app.get('/api/debug/nasa-test', async (req, res) => {
 });
 
 
+// SPA Catch-all: Route all other GET requests to client index.html
+app.get('*', (req, res) => {
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ success: false, error: 'Endpoint not found' });
+  }
+  const indexPath = path.join(clientDistPath, 'index.html');
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.json({
+      status: 'ok',
+      message: 'AEGIS backend is running. Frontend dist not found. Run npm run build.',
+      endpoints: ['/api/health', '/api/events', '/api/iss', '/api/briefing', '/api/solar-wind']
+    });
+  }
+});
+
 // Start Express Server & Poller
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`=================================================`);
   console.log(` 🛡️  AEGIS MISSION CONTROL BACKEND STARTED`);
-  console.log(` 🚀 Listening on http://localhost:${PORT}`);
+  console.log(` 🚀 Listening on http://0.0.0.0:${PORT}`);
   console.log(`=================================================`);
   
   startPoller();
