@@ -1,0 +1,18 @@
+[Unit]
+Description=AEGIS Space-Weather & Orbital Threat Mission Control
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/aegis-star
+ExecStart=/usr/bin/node server/src/index.js
+Restart=always
+RestartSec=5
+EnvironmentFile=/root/aegis-star/.env
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

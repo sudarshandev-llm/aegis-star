@@ -189,6 +189,46 @@ npm run build
 npm start
 ```
 
+The Express server serves the built React app from `client/dist` and exposes the
+REST API under `/api`, so a single process runs the whole application.
+
+### 🛰️ Deploying to Hack Club Nest
+
+The production instance runs on [Hack Club Nest](https://hackclub.app) at
+**https://beastsudarsh09.hackclub.app**.
+
+Nest serves public traffic through its own reverse proxy. A container registers a
+hostname in the [Nest dashboard](https://hackclub.app) under **Dashboard → Domains**,
+pointing it at the local port the app listens on (port `80` for this deployment).
+
+On the server:
+
+```bash
+# 1. Check out the project and configure the environment
+cd /root/aegis-star
+cp .env.example .env
+# Set NASA_API_KEY (optional but recommended) and PORT=80
+
+# 2. Build the client and install server dependencies
+npm run build
+
+# 3. Install the systemd unit and start the service
+cp deploy/aegis-star.service /etc/systemd/system/aegis-star.service
+systemctl daemon-reload
+systemctl enable --now aegis-star.service
+
+# 4. Verify locally
+curl http://127.0.0.1/api/health
+```
+
+For subsequent releases:
+
+```bash
+cd /root/aegis-star
+git pull
+./deploy/deploy.sh
+```
+
 ### 🌐 Deploying to Render (Free Live URL)
 
 AEGIS is configured for zero-config 1-click deployment on **[Render](https://render.com)**:
