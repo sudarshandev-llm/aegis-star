@@ -35,20 +35,17 @@ export function calculateRadioBlackoutScale(classType = '') {
 
 // Fetch NOAA SWPC Solar Wind Plasma Feed (no API key needed)
 export async function fetchSolarWindSpeed() {
-  const url = 'https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json';
+  // NOAA retired the old /products/solar-wind/plasma-7-day.json product.
+  // The summary feed is a tiny one-row payload with the latest reading.
+  const url = 'https://services.swpc.noaa.gov/products/summary/solar-wind-speed.json';
   try {
     const res = await fetchWithTimeout(url, { timeout: 6000 });
     if (!res.ok) throw new Error(`NOAA SWPC HTTP ${res.status}`);
     const data = await res.json();
-    if (Array.isArray(data) && data.length > 1) {
-      // Find latest non-null speed (index 2)
-      for (let i = data.length - 1; i >= 1; i--) {
-        const row = data[i];
-        const speedVal = parseFloat(row[2]);
-        if (!isNaN(speedVal) && speedVal > 0) {
-          return { speed_kms: Math.round(speedVal), is_simulated: false };
-        }
-      }
+    const latest = Array.isArray(data) ? data[data.length - 1] : data;
+    const speedVal = parseFloat(latest?.proton_speed);
+    if (!isNaN(speedVal) && speedVal > 0) {
+      return { speed_kms: Math.round(speedVal), is_simulated: false };
     }
   } catch (err) {
     console.warn(`[NOAA SWPC] Solar wind plasma fetch failed (${err.message}).`);
